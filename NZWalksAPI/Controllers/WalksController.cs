@@ -93,5 +93,28 @@ namespace NZWalksAPI.Controllers
             return Ok(mapper.Map<WalkDto>(walkDomainModel));
 
         }
+
+        //Delete Region
+        //DELETE :  https://localhost:port number/api/Regions/{id}
+        [HttpDelete]
+        [Route("{id:Guid}")]
+        public async Task<IActionResult> Delete([FromRoute] Guid id)
+        {
+            var walkDomainModel = await walkRepository.DeleteAsync(id);
+            if (walkDomainModel == null)
+            {
+                return NotFound();
+            }
+
+
+
+            //Return deleted Region Back
+            //Map Domain to DTO
+
+
+
+            return Ok(mapper.Map<WalkDto>(walkDomainModel));
+        }
     }
+
 }
