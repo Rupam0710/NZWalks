@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Components.Forms.Mapping;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using NZWalksAPI.CustomActionFilters;
 using NZWalksAPI.Data;
 using NZWalksAPI.Models.Domain;
 using NZWalksAPI.Models.DTO;
@@ -66,10 +67,10 @@ namespace NZWalksAPI.Controllers
         //POST To create a new Region
         //POST : https://localhost:port number/api/Regions
         [HttpPost]
+        [ValidateModel]
         public async Task<IActionResult> Create([FromBody] AddRegionRequestDto addRegionRequestDto) {
 
-            if(ModelState.IsValid)
-            {
+            
                 //Map or Convert DTOs to Domain Model
 
                 var regionDomainModel = mapper.Map<Region>(addRegionRequestDto);
@@ -83,12 +84,6 @@ namespace NZWalksAPI.Controllers
 
 
                 return CreatedAtAction(nameof(GetById), new { id = regionDto.Id }, regionDto);
-            }
-            else
-            {
-                return BadRequest(ModelState);
-            }
-
            
         }
 
@@ -97,11 +92,11 @@ namespace NZWalksAPI.Controllers
 
         [HttpPut]
         [Route("{id:Guid}")]
-        public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] UpdateRegionRequestDto updateRegionRequestDto)
+        [ValidateModel]
+    public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] UpdateRegionRequestDto updateRegionRequestDto)
         {
 
-            if (ModelState.IsValid)
-            {
+            
                 //Map RegionDTO To Region
 
 
@@ -119,14 +114,7 @@ namespace NZWalksAPI.Controllers
 
                 //return DTO 
                 return Ok(mapper.Map<RegionDto>(regionDomainModel));
-            }
-            else
-            {
-                return BadRequest(ModelState);
-            }
-
-
-
+          
         }
 
         //Delete Region
@@ -152,3 +140,4 @@ namespace NZWalksAPI.Controllers
         }
         }
         }
+
