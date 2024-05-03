@@ -9,6 +9,8 @@ using System.Text;
 using Microsoft.OpenApi.Models;
 using Microsoft.Extensions.FileProviders;
 using Serilog;
+using Microsoft.AspNetCore.Diagnostics;
+using NZWalksAPI.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -107,7 +109,10 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+  
 }
+
+app.UseMiddleware<NZWalksAPI.Middlewares.ExceptionHandlerMiddleware>();
 
 app.UseHttpsRedirection();
 app.UseAuthentication();

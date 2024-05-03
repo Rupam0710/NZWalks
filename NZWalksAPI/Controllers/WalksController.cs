@@ -5,6 +5,8 @@ using NZWalksAPI.CustomActionFilters;
 using NZWalksAPI.Models.Domain;
 using NZWalksAPI.Models.DTO;
 using NZWalksAPI.Repository;
+using System.Linq.Expressions;
+using System.Net;
 
 namespace NZWalksAPI.Controllers
 {
@@ -51,11 +53,17 @@ namespace NZWalksAPI.Controllers
         public async Task<IActionResult> GetAll([FromQuery] string? filterOn, [FromQuery] string? filterQuery,
             [FromQuery] string? sortBy, [FromQuery] bool? isAscending, [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 1000)
         {
-            //Get data from database - domain models
-            var walkDomain = await walkRepository.GetAllAsync(filterOn,filterQuery, sortBy, isAscending??true,pageNumber,pageSize);
+            
+                
+                //Get data from database - domain models
+                var walkDomain = await walkRepository.GetAllAsync(filterOn, filterQuery, sortBy, isAscending ?? true, pageNumber, pageSize);
 
-            //Return DTOs
-            return Ok(mapper.Map<List<WalkDto>>(walkDomain));
+            //Create an exception
+            throw new Exception("This is a new exception");
+
+                //Return DTOs
+                return Ok(mapper.Map<List<WalkDto>>(walkDomain));
+           
         }
 
         //Get walks by id
