@@ -10,6 +10,7 @@ using NZWalksAPI.Models.Domain;
 using NZWalksAPI.Models.DTO;
 using NZWalksAPI.Repository;
 using System.Collections.Generic;
+using System.Text.Json;
 
 namespace NZWalksAPI.Controllers
 {
@@ -22,28 +23,42 @@ namespace NZWalksAPI.Controllers
         private readonly NZWalksDbContextcs dbContext;
         private readonly IRegionRepository regionRepository;
         private readonly IMapper mapper;
+        private readonly ILogger<RegionsController> logger;
 
-        public RegionsController(NZWalksDbContextcs dbContext , IRegionRepository regionRepository, IMapper mapper)
+        public RegionsController(NZWalksDbContextcs dbContext , IRegionRepository regionRepository, IMapper mapper, ILogger<RegionsController> logger)
         {
             this.dbContext = dbContext;
             this.regionRepository = regionRepository;
             this.mapper = mapper;
+            this.logger = logger;
         }
         //GET ALL REGIONS
         //GET : https://localhost:port number/api/Regions
         [HttpGet]
-        [Authorize(Roles = "Reader")]
+        // [Authorize(Roles = "Reader")]
         public async Task<IActionResult> GetAll()
-        {   
-            //Get data from database - domain models
-            var regionsDomain = await regionRepository.GetAllAsync();
+        {
+            try
+            {
+                throw new Exception("This is a custom exception");
+
+                //Get data from database - domain models
+                var regionsDomain = await regionRepository.GetAllAsync();
+
+
+                logger.LogInformation($"Finished GetAllRegions request with data: {JsonSerializer.Serialize(regionsDomain)}");
+
+
+                //Return DTOs
+                return Ok(mapper.Map<List<RegionDto>>(regionsDomain));
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, ex.Message );
+                throw;
+            }
 
            
-
-        
-
-        //Return DTOs
-        return Ok(mapper.Map<List<RegionDto>>(regionsDomain));
         }
 
         //GET SINGLE REGION(GET REGION BY ID)
