@@ -18,9 +18,13 @@
         @foreach(var walk in Model)
         {
             <tr>
-                <th>@walk.Id</th>
-                <th>@walk.Name</th>
-                <th>@walk.Code</th>
+                <td>@walk.Id</td>
+                <td>@walk.Name</td>
+                <td>@walk.Code</td>
+                <td>
+                    <a  asp-controller="Regions" asp-action="Edit" asp-route-id="@walk.Id" class="btn btn-light">Edit</a>
+                </td>
+                
             </tr>
         }  
     </tbody>
